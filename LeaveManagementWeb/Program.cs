@@ -1,4 +1,4 @@
-using Humanizer;
+//using Humanizer;
 using LeaveManagementWeb.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -10,8 +10,7 @@ using Microsoft.EntityFrameworkCore;
     5. Now we need to add two tables, the leavetype table and LeaveAllocation table. Since these tables have common coloumns, we can create another class with the common coloumns
        and then inherit this class onto the LeaveType and LeaveAllocation class. Now add migra and update database
     
-    
-    asjkd*/
+    */
 
 var builder = WebApplication.CreateBuilder(args);
 
