@@ -1,13 +1,13 @@
-﻿@model IEnumerable<LeaveManagementWeb.Data.LeaveType>
+﻿@model IEnumerable<LeaveManagementWeb.Models.LeaveTypeVM>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>LeaveType</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a class="btn btn-info" asp-action="Create"><i class="fa-solid fa-plus"></i>&nbsp; Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -18,12 +18,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.DefaultDays)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateCreated)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DateModified)
-            </th>
+            
             <th></th>
         </tr>
     </thead>
@@ -35,19 +30,45 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DefaultDays)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateCreated)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DateModified)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>            
+            <td align="right">
+                <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-user-pen"></i></a> &nbsp;
+                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> &nbsp;
+                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"><i class="fa-regular fa-trash-can"></i></button>
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<form id="deleteForm" asp-action="Delete">
+    <input type="hidden" id="leaveTypeId" name="Isd"/> @*The name="Isd" will pass in the value to the parameter in the respective Controller and action if the variable name of parameter is
+                                                        also Isd or isd(basically case insensitive). If you go to LeaveTypeController DeleteConfirmed function you'll understand.*@
+</form> 
+
+
+@*Now we need to add a jq code to show the sweetalert when we click the delete button, we can add the jq code by adding below lines*@
+@section Scripts{
+    <script>
+        $(function(){
+            $('.table').DataTable();
+            $('.deleteBtn').click(function(e) { @*Now we need to add the classname to indicate which class is being called. The click(function(e)) will say that the following code*@
+                                                    @*should be executed on click of the class*@
+                swal({
+                    title: "Are you sure?",
+                    text: "Are you sure you want to delete?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => { @*This line says if the button is clicked, store the boolean 'True' inside confirm*@
+                        if(confirm){ @*If confirm is 'True', the following code will be executed*@
+                            var btn = $(this); @*This line selects the particular button*@
+                            var id = btn.data("id"); @*This line will take the value in data-id and put inside the variable*@
+                            $('#leaveTypeId').val(id);
+                            $('#deleteForm').submit();
+                        }
+                });
+            });
+        });
+    </script>
+}
