@@ -9,9 +9,12 @@ using LeaveManagementWeb.Data;
 using AutoMapper;
 using LeaveManagementWeb.Models;
 using LeaveManagementWeb.Contracts;
+using Microsoft.AspNetCore.Authorization;
+using LeaveManagementWeb.Constants;
 
 namespace LeaveManagementWeb.Controllers
 {
+    [Authorize(Roles = Roles.Administrator)]
     public class LeaveTypesController : Controller
     {
           /*The 'private' means this variable can only be accessed by this class and 'readonly' means this variable value can only be assigned once and that too

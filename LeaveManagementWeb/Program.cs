@@ -3,7 +3,9 @@ using LeaveManagementWeb.Configurations;
 using LeaveManagementWeb.Contracts;
 using LeaveManagementWeb.Data;
 using LeaveManagementWeb.Repositories;
+using LeaveManagementWeb.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 
 /*  1. We extend the AspNetUsers table which is a table created when we use authentication type as induvidual authentication
@@ -23,8 +25,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireConfirmedAccount = true)//this says allow only those users who have confirmed their email using email verification if we want it to be optional,
+                                                                                                       //just set it to false.
+    .AddRoles<IdentityRole>() //Adds roles to user the moment the program starts.(IdentityRole is a built in class which contains the required fields like userid roleid)                              
     .AddEntityFrameworkStores<ApplicationDbContext>();
+
+builder.Services.AddTransient<IEmailSender>(s => new EmailSender("localhost", 25, "no-reply@leave.com"));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
