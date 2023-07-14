@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Index";
 }
-
+@*1. Add leaveAllocation button which allocates leaves to the Employees using swal(jquery)*@
 <h1>LeaveType</h1>
 
 <p>
@@ -23,6 +23,9 @@
         </tr>
     </thead>
     <tbody>
+@*Add a button which allocates leave to employee for each employee mapped to Id. Create a form just like we did for delete button. The button will trigger swal 
+    which will submit the form with redquired data
+*@
 @foreach (var item in Model) {
         <tr>
             <td>
@@ -32,9 +35,10 @@
                 @Html.DisplayFor(modelItem => item.DefaultDays)
             </td>            
             <td align="right">
+                <button data-id="@item.Id" class="btn btn-primary allocateBtn" type="button">Allocate leave</button>
                 <a class="btn btn-warning" asp-action="Edit" asp-route-id="@item.Id"><i class="fa-solid fa-user-pen"></i></a> &nbsp;
-                    <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> &nbsp;
-                    <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"><i class="fa-regular fa-trash-can"></i></button>
+                <a class="btn btn-success" asp-action="Details" asp-route-id="@item.Id"><i class="fa-solid fa-circle-info"></i></a> &nbsp;
+                <button data-id="@item.Id" class="btn btn-danger deleteBtn" type="button"><i class="fa-regular fa-trash-can"></i></button>
             </td>
         </tr>
 }
@@ -46,12 +50,16 @@
                                                         also Isd or isd(basically case insensitive). If you go to LeaveTypeController DeleteConfirmed function you'll understand.*@
 </form> 
 
+<form id="allocationForm" asp-action="AllocateLeave"> @*Will go to AllocateLeave action and allocate the leave to every single employee in the database. If the leave is already 
+                                                        allocated to certain employees, then the leave should not be allocated again for the same period*@
+    <input type="hidden" id="leaveTypeIdAllocate" name="Id"/>
+</form>
+
 
 @*Now we need to add a jq code to show the sweetalert when we click the delete button, we can add the jq code by adding below lines*@
 @section Scripts{
     <script>
         $(function(){
-            $('.table').DataTable();
             $('.deleteBtn').click(function(e) { @*Now we need to add the classname to indicate which class is being called. The click(function(e)) will say that the following code*@
                                                     @*should be executed on click of the class*@
                 swal({
@@ -67,6 +75,26 @@
                             $('#leaveTypeId').val(id);
                             $('#deleteForm').submit();
                         }
+                });
+            });
+            $('.allocateBtn').click(function (e) {
+        @*Now we need to add the classname to indicate which class is being called. The click(function(e)) will say that the following code*@
+        @*should be executed on click of the class*@
+                swal({
+                    title: "Are you sure?",
+                    text: "Are you sure you want to allocate this leave to all the employees?",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true
+                }).then((confirm) => {
+        @*This line says if the button is clicked, store the boolean 'True' inside confirm*@
+                                if (confirm) {
+        @*If confirm is 'True', the following code will be executed*@
+                                    var btn = $(this); @*This line selects the particular button*@
+                                    var id = btn.data("id"); @*This line will take the value in data-id and put inside the variable*@
+                            $('#leaveTypeIdAllocate').val(id);
+                            $('#allocationForm').submit();
+                    }
                 });
             });
         });

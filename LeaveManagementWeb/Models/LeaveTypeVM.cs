@@ -16,5 +16,4 @@ namespace LeaveManagementWeb.Models
         public int DefaultDays { get; set; }
 
     }
-}
- 
+}  

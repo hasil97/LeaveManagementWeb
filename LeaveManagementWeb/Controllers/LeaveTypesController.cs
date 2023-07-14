@@ -21,13 +21,17 @@ namespace LeaveManagementWeb.Controllers
                                                           in constructor of this class.*/
         private readonly ILeaveTypeRepository leaveTypeRepository;
         private readonly IMapper mapper;
+        private readonly ILeaveAllocationRepository leaveAllocationRepository;
 
-        public LeaveTypesController(/*ApplicationDbContext context*/ILeaveTypeRepository leaveTypeRepository,IMapper mapper)  /*These lines are basically dependency Injection. We are injecting an already existing database onto this class
+        public LeaveTypesController(/*ApplicationDbContext context*/ILeaveTypeRepository leaveTypeRepository,
+            IMapper mapper, 
+            ILeaveAllocationRepository leaveAllocationRepository)  /*These lines are basically dependency Injection. We are injecting an already existing database onto this class
                                                                     i.e ApplicationDbContext*/
         {
             //_context = context;
             this.leaveTypeRepository = leaveTypeRepository;
             this.mapper = mapper;
+            this.leaveAllocationRepository = leaveAllocationRepository;
         }
 
         // GET: LeaveTypes
@@ -148,6 +152,14 @@ namespace LeaveManagementWeb.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AllocateLeave(int Id) 
+        {
+            await leaveAllocationRepository.LeaveAllocation(Id);
+            return RedirectToAction(nameof(Index));
+        }
         /*private bool LeaveTypeExists(int id)
         {
           return _context.LeaveTypes.Any(e => e.Id == id);

@@ -6,6 +6,8 @@ namespace LeaveManagementWeb.Data
     {
         public int NumberOfDays { get; set; }
 
+        public int Period { get; set; } //The year like 2022, 2023 etc.
+
         public LeaveType LeaveType { get; set; } //Here we need to create a foreign key which connects to a table's primary key. So first we need to create a class variable
                                                  //with datatype as name of the parent class/table. Then we need to give the class name as the same.
                                                  

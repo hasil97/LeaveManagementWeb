@@ -34,6 +34,9 @@
                         </li>
                         @if (User.IsInRole(Roles.Administrator))
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="Employees" asp-action="Index">Employees</a>
+                            </li>
                             <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Leave Management
@@ -70,7 +73,11 @@
     <script src="~/lib/sweetalert/sweetalert.min.js"></script> @*When adding a third-party js, the order is important, i.e we need to add the script below jq and bs *@                                                    
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
-
+    <script>                         
+        $(function(){  //when calling a jquery, we should use the $ sign and the 'function()' function
+            $('.table').DataTable();
+        });
+    </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
