@@ -13,8 +13,7 @@ using Microsoft.EntityFrameworkCore;
     3. Now since we want AspNetUsers to have additional coloumns present in Employee class, we need to extend the Employee class in ApplicationDbContext : IdentityDbContext<Employee>
     4. Now we need to make changes in the program.cs. We need to change AddDefaultIdentity<IdentityUser> to AddDefaultIdentity<Employee>. Now add-migration and update-database
     5. Now we need to add two tables, the leavetype table and LeaveAllocation table. Since these tables have common coloumns, we can create another class with the common coloumns
-       and then inherit this class onto the LeaveType and LeaveAllocation class. Now add migra and update database
-    
+       and then inherit this class onto the LeaveType and LeaveAllocation class. Now add migra and update database    
     */
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,11 +29,13 @@ builder.Services.AddDefaultIdentity<Employee>(options => options.SignIn.RequireC
     .AddRoles<IdentityRole>() //Adds roles to user the moment the program starts.(IdentityRole is a built in class which contains the required fields like userid roleid)                              
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddTransient<IEmailSender>(s => new EmailSender("localhost", 25, "no-reply@leave.com"));
 
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 builder.Services.AddScoped<ILeaveTypeRepository, LeaveTypeRepository>();
 builder.Services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository>();
+builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
 builder.Services.AddControllersWithViews();

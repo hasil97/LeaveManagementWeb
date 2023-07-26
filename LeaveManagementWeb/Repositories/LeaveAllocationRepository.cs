@@ -4,7 +4,6 @@ using LeaveManagementWeb.Contracts;
 using LeaveManagementWeb.Data;
 using LeaveManagementWeb.Models;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.CodeAnalysis.FlowAnalysis.DataFlow;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementWeb.Repositories
@@ -42,13 +41,13 @@ namespace LeaveManagementWeb.Repositories
             return employeeAllocationModel;
         }
 
-        public async Task<LeaveAllocationEditVM> GetEmployeeAllocation(int id )
+        public async Task<LeaveAllocationEditVM> GetEmployeeAllocation(int id)
         {
             var allocation = await context.LeaveAllocations
                 .Include(q => q.LeaveType)
                 .FirstOrDefaultAsync(q => q.Id == id);
 
-            if(allocation == null)
+            if (allocation == null)
             {
                 return null;
             }
@@ -100,6 +99,11 @@ namespace LeaveManagementWeb.Repositories
             await UpdateAsync(leaveAllocation);
 
             return true;
+        }
+
+        public async Task<LeaveAllocation?> GetEmployeeAllocation(string employeeId, int leaveTypeId)
+        {
+            return await context.LeaveAllocations.FirstOrDefaultAsync(q => q.EmployeeId == employeeId && q.LeaveTypeId == leaveTypeId);
         }
     }
 }

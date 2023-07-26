@@ -6,9 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - LeaveManagementWeb</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css" />    
     <link rel="stylesheet" href="~/lib/font-awesome/css/all.css" asp-append-version="true" />    
-    <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" asp-append-version="true" />    
+    <link rel="stylesheet" href="~/lib/font-awesome/css/fontawesome.css" asp-append-version="true" />
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />    
     <link rel="stylesheet" href="~/LeaveManagementWeb.styles.css" asp-append-version="true" />
 </head>
@@ -26,12 +27,15 @@
                         <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-page="/Privacy">Apply For Leave</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" asp-area="" asp-page="">My Leave</a>
-                        </li>
+                        @if(User.IsInRole(Roles.User))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="LeaveRequests" asp-action="Create">Apply For Leave</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" asp-area="" asp-controller="LeaveRequests" asp-action="MyLeave">My Leave</a>
+                            </li>
+                        }
                         @if (User.IsInRole(Roles.Administrator))
                         {
                             <li class="nav-item">
@@ -43,9 +47,7 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" asp-controller="LeaveTypes" asp-action="Index">Leave Types</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="">Leave Allocations</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="">Leave Requests</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-page="">Employee Management</a></li>
+                                <li><a class="dropdown-item" asp-controller="LeaveRequests" asp-action="Index">Leave Requests</a></li>
                             </ul>
                             </li>
                         }
@@ -73,9 +75,13 @@
     <script src="~/lib/sweetalert/sweetalert.min.js"></script> @*When adding a third-party js, the order is important, i.e we need to add the script below jq and bs *@                                                    
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
     <script>                         
         $(function(){  //when calling a jquery, we should use the $ sign and the 'function()' function
             $('.table').DataTable();
+            $(".datepicker").datepicker({
+                dateFormat: "yy-mm-dd"
+            });
         });
     </script>
     <script src="~/js/site.js" asp-append-version="true"></script>
