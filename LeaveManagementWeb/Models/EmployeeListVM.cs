@@ -11,7 +11,9 @@ namespace LeaveManagementWeb.Models
         public string Lastname { get; set; }
 
         [Display(Name = "Date Joined")]
-        public string DateJoined { get; set; }
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}")] //The display format annotation helps to format the date to the required format
+        [DataType(DataType.Date)] //This ensure datatype that we is displayed gets converted from datetime to date
+        public DateTime DateJoined { get; set; }
 
         [Display(Name = "Email")]
         public string Email { get; set; }

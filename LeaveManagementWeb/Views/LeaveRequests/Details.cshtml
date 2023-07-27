@@ -75,17 +75,32 @@
                                                                                                        be in the controller
             <button type="submit" asp-route-approved="false" class="btn btn-danger">Reject</button>
         </form>*@
-        <form asp-action="ApproveRequest">
-            <input name="Id" value="@Model.Id" type="hidden"/> @*Name binds the value to the param in the action*@
-            <input name="approved" type="hidden" value="true"/>
-            <button type="submit" class="btn btn-success">Approve</button>
-        </form>
-        <form asp-action="ApproveRequest">
-            <input name="Id" value="@Model.Id" type="hidden"/>
-            <input name="approved" type="hidden" value="false"/>
-            <button type="submit" class="btn btn-danger">Reject</button>
-        </form>
-        
+        <br />
+        <div class="container">
+        <div class="row">
+            <div class="col-1">
+                <form asp-action="ApproveRequest">
+                    <input name="Id" value="@Model.Id" type="hidden" /> @*Name binds the value to the param in the action*@
+                    <input name="approved" type="hidden" value="true" />
+                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                </form>
+            </div>
+            <div class="col-1 text-center">
+                <form asp-action="ApproveRequest">
+                    <input name="Id" value="@Model.Id" type="hidden" />
+                    <input name="approved" type="hidden" value="false" />
+                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                </form>
+            </div>
+            <div class="col-2">
+                   <a class="btn btn-dark btn-sm" asp-action="Index">Back to List</a>
+            </div>
+        </div>
+        </div>
     }
-    <a class="btn btn-dark" asp-action="Index">Back to List</a>
+    else
+    {
+        <a class="btn btn-dark" asp-action="Index">Back to List</a>
+    }
+    
 </div>

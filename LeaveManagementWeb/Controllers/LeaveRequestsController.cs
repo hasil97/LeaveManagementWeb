@@ -108,7 +108,7 @@ namespace LeaveManagementWeb.Controllers
                     {
                         return RedirectToAction(nameof(MyLeave));
                     }
-                    ModelState.AddModelError(string.Empty, "You have exceeded you allocation with this request.");
+                    ModelState.AddModelError(string.Empty, "You have exceeded your allocation with this request.");
                 }
             }
             catch (Exception ex)

@@ -96,10 +96,10 @@
                     }
             </td>
             <td>
-                    @if(item.Approved == null)
+                    @if(item.Approved == null && item.Cancelled == false)
                     {
-                        <form>
-                            <input asp-form="@item.Id" type="hidden" />
+                        <form asp-action="Cancel">
+                            <input type="hidden" name="id" value="@item.Id"/>
                             <button type="submit" class="btn btn-danger btn-sm">Cancel Request</button>
                         </form>
                     }
