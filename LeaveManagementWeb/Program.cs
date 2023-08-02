@@ -7,6 +7,7 @@ using LeaveManagementWeb.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 /*  1. We extend the AspNetUsers table which is a table created when we use authentication type as induvidual authentication
     2. The name of the extended table is Employee table. So we need to create an Employee class and then inherit IdentityUser class, which is part of Microsoft.AspNetCore.Identity
@@ -38,9 +39,16 @@ builder.Services.AddScoped<ILeaveAllocationRepository, LeaveAllocationRepository
 builder.Services.AddScoped<ILeaveRequestRepository, LeaveRequestRepository>();
 
 builder.Services.AddAutoMapper(typeof(MapperConfig));
+
+builder.Host.UseSerilog((ctx, lc) =>
+    lc.WriteTo.Console()
+    .ReadFrom.Configuration(ctx.Configuration));  //the readfrom.configuration will look through the appsettings.json serilog/WriteTo section of the json and write logs accordingly to that paths.
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
+
+app.UseSerilogRequestLogging();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -49,7 +57,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseExceptionHandler("/Home/Error");
+    app.UseExceptionHandler("/Home/Error"); //this basically says to redirect the user to error page in homecontroller in case of any exception
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }

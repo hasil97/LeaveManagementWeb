@@ -2,7 +2,6 @@
 //Now this class need to interact with a db, Therefore we need to inject db using ctor
 using LeaveManagementWeb.Contracts;
 using LeaveManagementWeb.Data;
-using LeaveManagementWeb.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace LeaveManagementWeb.Repositories
@@ -39,7 +38,7 @@ namespace LeaveManagementWeb.Repositories
         public async Task<bool> Exists(int id) //This method returns true if a record Exists 
         {
             var entity = await GetAsync(id);
-            return entity != null;        
+            return entity != null;
         }
 
         public async Task<List<T>> GetAllAsync()
@@ -49,7 +48,7 @@ namespace LeaveManagementWeb.Repositories
 
         public async Task<T?> GetAsync(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return null;
             }
@@ -59,6 +58,7 @@ namespace LeaveManagementWeb.Repositories
         public async Task UpdateAsync(T entity)
         {
             context.Update(entity);
+            // context.Entry(entity).State = EntityState.Modified;  //basically this and above line is the same. This line is the detailed version/what's happening inside the above method.
             await context.SaveChangesAsync();
         }
     }

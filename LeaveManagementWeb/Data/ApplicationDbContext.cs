@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using LeaveManagementWeb.Configurations.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using LeaveManagementWeb.Configurations.Entities;
-using LeaveManagementWeb.Models;
 
 namespace LeaveManagementWeb.Data
 {
@@ -11,7 +10,7 @@ namespace LeaveManagementWeb.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
-              
+
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -22,10 +21,26 @@ namespace LeaveManagementWeb.Data
             builder.ApplyConfiguration(new UserRoleSeedConfiguration());
         }
 
-        public DbSet<LeaveType> LeaveTypes { get; set;}
+        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default) //Now whenever we call SaveChangesAsync function in this program, it'll be redirected 
+                                                                                                  //to this function
+        {
+            foreach (var entry in base.ChangeTracker.Entries<BaseEntity>().Where(q => q.State == EntityState.Added ||
+             q.State == EntityState.Modified)) //This will loop through each record in the changetracker temporary collection which has modified or added state
+            {
+                entry.Entity.DateModified = DateTime.Now;
 
-        public DbSet<LeaveAllocation> LeaveAllocations { get; set;}
-        public DbSet<LeaveRequest> LeaveRequests { get; set;}
+                if (entry.State == EntityState.Added)
+                {
+                    entry.Entity.DateCreated = DateTime.Now;
+                }
+            }
+            return base.SaveChangesAsync(cancellationToken);
+        }
+
+        public DbSet<LeaveType> LeaveTypes { get; set; }
+
+        public DbSet<LeaveAllocation> LeaveAllocations { get; set; }
+        public DbSet<LeaveRequest> LeaveRequests { get; set; }
 
     }
 }
